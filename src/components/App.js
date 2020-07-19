@@ -14,6 +14,8 @@ class App extends Component {
     this.state = {
       myAppointments: [],
       formDisplay: false,
+      orderBy: 'aptDate',
+      orderDir: 'asc',
       lastIndex: 0
     }
     //this.deleteAppointment = this.deleteAppointment.bind(this);
@@ -46,6 +48,13 @@ class App extends Component {
 
   }
 
+  changeOrder = (order, dir)=> {
+    this.setState({
+      orderBy: order,
+      orderDir: dir
+    })
+  }
+
   componentDidMount() {
     fetch('./data.json').then(response => response.json()).then(result => {
       const apts = result.map(item =>{
@@ -60,6 +69,24 @@ class App extends Component {
   }
 
   render() {
+
+ let order;
+ let filteredApts = this.state.myAppointments;
+ if (this.state.orderDir === 'asc') {
+   order = 1;
+ } else{
+   order = -1;
+ }
+
+ filteredApts.sort((a,b) => {
+   if(a[this.state.orderBy].toLowerCase() < b[this.state.orderBy].toLowerCase()){
+     return -1 * order;
+   }
+   else{
+     return 1 * order;
+   }
+ })
+
   return (
     <main id="petratings">
     <div className="container">
@@ -67,8 +94,8 @@ class App extends Component {
         <div className="col-md-12 bg-white">
           <div className="container">
             <AddAppointments formDisplay = {this.state.formDisplay} toggleForm = {this.toggleForm} addAppointment= {this.addAppointment}></AddAppointments>
-            <SearchAppointments></SearchAppointments>
-            <ListAppointments appointments = {this.state.myAppointments}
+            <SearchAppointments orderBy = {this.state.orderBy} orderDir = {this.state.orderDir} changeOrder = {this.changeOrder}></SearchAppointments>
+            <ListAppointments appointments = {filteredApts}
             deleteAppointment = {this.deleteAppointment}></ListAppointments>
           </div>
         </div>
