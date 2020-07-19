@@ -3,6 +3,7 @@ import {FaPlus} from 'react-icons/fa';
 
 class AddAppointments extends Component {
     constructor(){
+        super();
         this.state = {
             petName: '',
             ownerName:'',
@@ -11,10 +12,35 @@ class AddAppointments extends Component {
         }
     }
 
-    handleChange(e){
+    handleChange = (e)=>{
         const target = e.target;
         const value = target.value;
         const name = target.name;
+
+        this.setState( {
+            [name] : value
+        })
+    }
+
+    handleAdd = (e) =>{
+        e.preventDefault();
+        let tempApt = {
+            petName : this.state.petName,
+            ownerName : this.state.ownerName,
+            aptNotes : this.state.aptNotes,
+            aptDate: this.state.aptDate + ' ' + this.state.aptTime,
+        }
+
+        this.props.addAppointment(tempApt);
+
+        this.setState({
+            petName: '',
+            ownerName:'',
+            aptNotes: '',
+            aptDate: ''
+        })
+
+        this.props.toggleForm();
     }
 
     render() {
@@ -28,7 +54,8 @@ class AddAppointments extends Component {
             </div>
   
             <div className="card-body">
-              <form id="aptForm" noValidate>
+              <form id="aptForm" noValidate
+              onSubmit = {this.handleAdd}>
                 <div className="form-group form-row">
                   <label
                     className="col-md-2 col-form-label text-md-right"
