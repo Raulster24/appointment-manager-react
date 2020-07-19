@@ -16,7 +16,7 @@ class App extends Component {
       formDisplay: false,
       orderBy: 'aptDate',
       orderDir: 'asc',
-      queryText: 'cat',
+      queryText: '',
       lastIndex: 0
     }
   }
@@ -52,6 +52,12 @@ class App extends Component {
     this.setState({
       orderBy: order,
       orderDir: dir
+    })
+  }
+
+  searchApts = (queryParam)=> {
+    this.setState({
+      queryText : queryParam
     })
   }
 
@@ -99,7 +105,7 @@ class App extends Component {
         <div className="col-md-12 bg-white">
           <div className="container">
             <AddAppointments formDisplay = {this.state.formDisplay} toggleForm = {this.toggleForm} addAppointment= {this.addAppointment}></AddAppointments>
-            <SearchAppointments orderBy = {this.state.orderBy} orderDir = {this.state.orderDir} changeOrder = {this.changeOrder}></SearchAppointments>
+            <SearchAppointments orderBy = {this.state.orderBy} orderDir = {this.state.orderDir} changeOrder = {this.changeOrder} searchApts = {this.searchApts}></SearchAppointments>
             <ListAppointments appointments = {filteredApts}
             deleteAppointment = {this.deleteAppointment}></ListAppointments>
           </div>
